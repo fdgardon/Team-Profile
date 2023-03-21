@@ -40,8 +40,9 @@ function manager(){
   ).then(function(answers){
     const manager = new Manager (answers.name, answers.id, answers.email, answers.officenumber)
     employee.push(manager)
+    return askForAdding()
   }) 
-}; askForAdding()
+}; 
 
 function askForAdding(){
   inquirer.prompt(
@@ -50,10 +51,10 @@ function askForAdding(){
         type: "list",
         name: "option",
         message: "Do you want to add more employee?",
-        choices: ["add more team member", "generate HTML"]
+        choices: ["Add more team member", "generateHtmlFile"]
       }
     ]
-  ).then(engineer())
+  ).then(ans=>engineer())
 }
 
 function engineer(){
@@ -84,7 +85,9 @@ function engineer(){
   ).then(function(answers){
     const engineer = new Engineer (answers.name, answers.id, answers.email, answers.gitHub)
     employee.push(engineer)
-  }).then(intern())
+    intern()
+
+  })
 
 };
 
@@ -113,22 +116,14 @@ function intern(){
       },
     ]
     ).then(function(answers){
-      const intern = new Intern (answers.name, answers.id, answers.email, answers.school)
+      const intern = new Intern (answers.name, answers.id, answers.school, answers.email)
       employee.push(intern)
-    }).then(writeToFile())
+    })
+    .then(writeToFile("team.html", generateHtmlFile(employee)))
 }
 
 function writeToFile(fileName, array){
-  fs.writeFileSync("NewHtml.index", generateHtmlFile(array),)
+  fs.writeFileSync("team.html", generateHtmlFile(employee),)
 };
 
-function init(){
-  inquirer
-  .prompt()
-  .then((array)=>{
-    console.log(array);
-    writeToFile("NewHTML.index", array)
-  })
-}
-init()
 
